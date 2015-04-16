@@ -5,21 +5,13 @@
 </head>
 
 <body>
+
 <?php
 
-include_once('DBClass.php');
+$
 
 $SystemDB= <<<HERE
 CREATE DATABASE CounsSystem
-HERE;
-         
-$Administrator= <<<HERE
-CREATE TABLE Administrator
-fname VARCHAR(15) NOT NULL,
-lname VARCHAR(15) NOT NULL,
-mailid VARCHAR(15),
-password VARCHAR(15) NOT NULL,
-PRIMARY KEY(mailid));  
 HERE;
 
 $Counselor= <<<HERE
@@ -29,6 +21,15 @@ lname VARCHAR(15) NOT NULL,
 mailid VARCHAR(15),
 password VARCHAR(15) NOT NULL,
 PRIMARY KEY(mailid));
+HERE;
+             
+$Administrator= <<<HERE
+CREATE TABLE Administrator
+fname VARCHAR(15) NOT NULL,
+lname VARCHAR(15) NOT NULL,
+mailid VARCHAR(15),
+password VARCHAR(15) NOT NULL,
+PRIMARY KEY(mailid));  
 HERE;
 
 $Applicant= <<<HERE
@@ -92,19 +93,8 @@ PRIMARY KEY(sender,time,date,mailidAppl),
 FOREIGN KEY(mailidAppl) REFERENCES Applicant(mailid));
 HERE;
 
-db=new DBClass();
-db->select("$SystemDB");
-db->select("$Administrator");
-db->select("$Counselor");
-db->select("$Applicant");
-db->select("$Note");
-db->select("$Docs");
-db->select("$Profile");
-db->select("$Message");
 
-?>
-</body>
-</html>
+
 
 
 

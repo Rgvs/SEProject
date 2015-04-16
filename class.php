@@ -74,6 +74,11 @@ class Administrator extends User
         // TODO implement here
     }
 
+    public function getCounsExcept($oldCouns)
+    {
+        // TODO implement here
+    }
+
 }
 
 class Counselor extends User 
@@ -104,6 +109,16 @@ class Counselor extends User
         // TODO implement here
     }
 
+    public function getCouns($mail) 
+    {
+        // TODO implement here
+    }
+
+    public function makeNote($note) 
+    {
+        // TODO implement here
+    }
+
 }
 
 class Applicant extends User
@@ -125,6 +140,16 @@ class Applicant extends User
     }
 
     public function viewDoc($docname)
+    {
+        // TODO implement here
+    }
+
+    public function editProfile($fieldToEdit) 
+    {
+        // TODO implement here
+    }
+
+    public function editDocs($docname,$content) 
     {
         // TODO implement here
     }
@@ -194,7 +219,7 @@ class Note
         // TODO implement here
     }
 
-    public function editNote() 
+    public function updateNote() 
     {
         // TODO implement here
     }
@@ -215,6 +240,10 @@ class Profile
     private $greScore;
     private $toeflScore;
 
+    public function updateField() 
+    {
+        // TODO implement here
+    }
 
 }
 
