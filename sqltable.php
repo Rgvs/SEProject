@@ -7,16 +7,22 @@
 <body>
 <?php
 
-include_once('DBClass.php');
+require_once('DBClass.php');
+
+
+echo "Creating SQL Database";
+
+/* Assuming existence of a database- SystemDB
 
 $SystemDB= <<<HERE
 CREATE DATABASE CounsSystem
-HERE;
-         
+HERE;              */
+
 $Administrator= <<<HERE
 CREATE TABLE Administrator
-fname VARCHAR(15) NOT NULL,
+(fname VARCHAR(15) NOT NULL,
 lname VARCHAR(15) NOT NULL,
+uname VARCHAR(15) NOT NULL,
 mailid VARCHAR(15),
 password VARCHAR(15) NOT NULL,
 PRIMARY KEY(mailid));  
@@ -37,9 +43,10 @@ CREATE TABLE Applicant
 lname VARCHAR(15) NOT NULL,
 mailid VARCHAR(15),
 password VARCHAR(15) NOT NULL,
-mailidCouns VARCHAR(15)
+firstVisit BOOLEAN NOT NULL DEFAULT TRUE,
+mailidCouns VARCHAR(15),
 PRIMARY KEY(mailid),
-FOREIGN KEY(mailidCouns) REFERNCES Counselor(mailid));
+FOREIGN KEY(mailidCouns) REFERENCES Counselor(mailid));
 HERE;
 
 // BLOB-upto 64KB; MEDIUMBLOB-upto 16 MB
@@ -47,18 +54,16 @@ HERE;
 $Note= <<<HERE
 CREATE TABLE Note
 (note MEDIUMBLOB,
-mailidAppl NOT NULL,
+mailidAppl VARCHAR(15) NOT NULL,
 PRIMARY KEY(mailidAppl),
 FOREIGN KEY(mailidAppl) REFERENCES Applicant(mailid));
 HERE;
 
 $Docs= <<<HERE
 CREATE TABLE Docs
-(resume MEDIUMBLOB,
-applEssay MEDIUMBLOB,
-recomLetter MEDIUMBLOB,
-otherDocs MEDIUMBLOB,
-mailidAppl NOT NULL,
+(docName VARCHAR(40) NOT NULL,
+content MEDIUMBLOB,
+mailidAppl VARCHAR(15) NOT NULL,
 PRIMARY KEY(mailidAppl),
 FOREIGN KEY(mailidAppl) REFERENCES Applicant(mailid));
 HERE;
@@ -74,7 +79,7 @@ yearofComp YEAR,
 gpa float,
 greScore float,
 toeflScore float,
-mailidAppl NOT NULL,
+mailidAppl VARCHAR(15) NOT NULL,
 PRIMARY KEY(mailidAppl),
 FOREIGN KEY(mailidAppl) REFERENCES Applicant(mailid));
 HERE;
@@ -87,21 +92,24 @@ CREATE TABLE Message
 content BLOB,
 date DATE NOT NULL,
 time TIME NOT NULL,
-mailidAppl NOT NULL,
+mailidAppl VARCHAR(15) NOT NULL,
 PRIMARY KEY(sender,time,date,mailidAppl),
 FOREIGN KEY(mailidAppl) REFERENCES Applicant(mailid));
 HERE;
 
-db=new DBClass();
-db->select("$SystemDB");
-db->select("$Administrator");
-db->select("$Counselor");
-db->select("$Applicant");
-db->select("$Note");
-db->select("$Docs");
-db->select("$Profile");
-db->select("$Message");
+$db=new DBClass();
 
+//db->select("$SystemDB");
+
+$db->query($Administrator);
+$db->query($Counselor);
+$db->query($Applicant);
+$db->query($Note);
+$db->query($Docs);
+$db->query($Profile);
+$db->query($Message);
+
+echo "SQL Database created successfully";
 ?>
 </body>
 </html>
