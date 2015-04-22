@@ -1,278 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> class definitions </title>
+</head>
+
+<body>
+
 <?php
 
-class User 
+
+require_once('DBClass.php');
+$db=new DBClass(); 
+
+class User
 {
-    
-    public function __construct()
-    {
+  protected $fname;
+  protected $lname;
+  protected $mailid;
+  protected $password;
+  
+  function getuser()
+  {
+    echo $this->username;
+  }
+ 
+  function getpasswd()
+  {
+    return $this->password;
+  }
 
-    }
+  function setuser($name)
+  {
+    $this->username=$name;
+  }
 
-    protected $fname;
-    protected $lname;
-    protected $mailid;
-    protected $password;
-
-    public function getname() 
-    {
-        // TODO implement here
-    }
-
-    class Class1 {
-
-        public function __construct()
-        {
-
-        }
-
-    }
-
+  function setpasswd($passwd)
+  {
+    $this->password=$passwd;
+  }
 }
 
-class Administrator extends User 
+class Administrator extends User
 {
+	private $uname;
 
-    public $manage account;
-
-    public function addCouns($fname, $lname, $mail, $passwd) 
-    {
-        // TODO implement here
-    }
-
-    public function addAppl($fname, $lname, $mail, $passwd) 
-    {
-        // TODO implement here
-    }
-
-    public function rmvCouns($mailid) 
-    {
-        // TODO implement here
-    }
-
-    public function rmvAppl($mailid) 
-    {
-        // TODO implement here
-    }
-
-    public function assgnAppl($mailAppl, $mailCouns) 
-    {
-        // TODO implement here
-    }
-
-    public function reassgn($mailCounsold, $mailCounsnew, $mailAppl) 
-    {
-        // TODO implement here
-    }
-
-    public function viewCouns() 
-    {
-        // TODO implement here
-    }
-
-    public function viewAppl()
-    {
-        // TODO implement here
-    }
-
-    public function getCounsExcept($oldCouns)
-    {
-        // TODO implement here
-    }
-
+//Return 'Administrator' if true, else NULL	
+	public function existsAdmin($uname,$password)
+	{
+		global $db;
+		$quname= $db->quote($uname);
+		$qpassword=$db->quote($password);
+		$query="SELECT *
+				FROM Administrator
+				WHERE uname=".$quname." AND password=".$qpassword.";";
+		$rows=$db->select("$query");
+		if($rows!==false)
+		{
+			return "Administrator";
+		}
+		else
+			return NULL;
+	}
+	
+//Return true on successful insertion into database, else false 
+	public function addCouns($fname,$lname,$mailid,$password)
+	{
+		global $db;
+		$qfname=$db->quote($fname);
+		$qlname=$db->quote($lname);
+		$qmailid=$db->quote($mailid);
+		$qpassword=$db->quote($password);
+		$query="INSERT INTO
+				Counselor
+				VALUES(".$qfname.",".$qlname.",".$qmailid.",".$qpassword.");";
+		$res=$db->query($query);
+		if($res==false)
+			return false;
+		else return true;
+	}
+	
+//Return true on successful insertion into database, else false
+	public function addAppl($fname,$lname,$mailid,$password,$mailidCouns)
+	{
+		global $db;
+		$qfname=$db->quote($fname);
+		$qlname=$db->quote($lname);
+		$qmailid=$db->quote($mailid);
+		$qpassword=$db->quote($password);
+		$qmailidCouns=$db->quote($mailidCouns);
+		$query="INSERT INTO
+				Applicant
+				VALUES(".$qfname.",".$qlname.",".$qmailid.",".$qpassword.",".true.",".$qmailidCouns.");";
+		$res=$db->query($query);
+		if($res==false)
+			return false;
+		else return true;
+	}
+	
 }
 
-class Counselor extends User 
+class Counselor extends User
 {
+	private $firstVisit;
+	private $mailidCouns;
 
-    public function sendMesg($mailAppl, $mesg) 
-    {
-        // TODO implement here
-    }
-
-    public function showAllMesg($mailAppl)
-    {
-        // TODO implement here
-    }
-
-    public function viewAppl() 
-    {
-        // TODO implement here
-    }
-
-    public function viewApplProfile($mailAppl)
-    {
-        // TODO implement here
-    }
-
-    public function viewApplDoc($mailAppl, $docname) 
-    {
-        // TODO implement here
-    }
-
-    public function getCouns($mail) 
-    {
-        // TODO implement here
-    }
-
-    public function makeNote($note) 
-    {
-        // TODO implement here
-    }
-
+//Return 'Counselor' if true, else NULL
+	public function existsCouns($mailid,$password)
+	{   global $db;
+		$qmailid= $db->quote($mailid);  
+		$qpassword=$db->quote($password);
+		$query="SELECT *
+				FROM Counselor
+				WHERE mailid=".$mailid." AND password=".$password.";";
+		$rows=$db->select($query);
+		if($rows!==false)
+		{
+			return "Counselor";
+		}
+		else 
+			return NULL;
+	}
 }
 
 class Applicant extends User
 {
 
-    public function sendMesg($mesg)
-    {
-        // TODO implement here
-    }
-
-    public function showAllMesg() 
-    {
-        // TODO implement here
-    }
-
-    public function viewProfile()
-    {
-        // TODO implement here
-    }
-
-    public function viewDoc($docname)
-    {
-        // TODO implement here
-    }
-
-    public function editProfile($fieldToEdit) 
-    {
-        // TODO implement here
-    }
-
-    public function editDocs($docname,$content) 
-    {
-        // TODO implement here
-    }
-
+//Return 'Applicant' if true, else NULL	
+	public function existsAppl($mailid,$password)
+	{
+		global $db;
+		$qmailid= $db->quote($mailid);
+		$qpassword=$db->quote($password);
+		$query="SELECT *
+				FROM Applicant
+				WHERE mailid=".$qmailid." AND password=".$qpassword.";"; 
+		$rows=$db->select($query);
+		if($rows!==false)
+		{
+			return "Applicant";
+		}
+		else
+			return NULL;
+	}
+	
+//Return the list of applicants if existing, else NULL
+	public function getApplList($mailidCouns)
+	{
+		global $db;
+		$qmailidCouns= $db->quote($mailidCouns);
+		$query="SELECT *
+				FROM Applicant
+				WHERE mailidCouns=".$qmailidCouns.";";
+		$rows=$db->select($query);
+		if($rows!=false)
+			return $rows;
+		else return NULL;
+	}
 }
 
-class AggrMessage 
+class Note
 {
-
-    public function __construct()
-    {
-
-    }
-
-    public function sendMesg($mesg, $sndr, $rcvr) 
-    {
-        // TODO implement here
-    }
-
-    public function showAllMesg() 
-    {
-        // TODO implement here
-    }
-
+	private $note;
+	private $mailidAppl;
 }
 
-class Message 
+class Docs
 {
-
-    public function __construct() 
-    {
-
-    }
-
-    private $sender;
-    private $receiver;
-    private $content;
-    private $time;
-    private $date;
-
-    public function showMesg() 
-    {
-        // TODO implement here
-    }
-
-    class Class1 {
-
-        public function __construct() {
-        }
-
-    }
-
+	private $docName;
+	private $content;
+	private $mailidAppl;
 }
 
-class Note 
+class Profile
 {
-
-    public function __construct() 
-    {
-
-    }
-
-    private $note;
-
-    public function viewNote()
-    {
-        // TODO implement here
-    }
-
-    public function updateNote() 
-    {
-        // TODO implement here
-    }
-
+	private $dob;
+	private $college;
+	private $branch;
+	private $yearofComp;
+	private $gpa;
+	private $greScore;
+	private $toeflScore;
+	private $mailidAppl;
 }
 
-class Profile 
-{
 
-    public function __construct() {
-    }
 
-    private $dob;
-    private $college;
-    private $branch;
-    private $yearofCompl;
-    private $gpa;
-    private $greScore;
-    private $toeflScore;
+?>
 
-    public function updateField() 
-    {
-        // TODO implement here
-    }
-
-}
-
-class Docs 
-{
-
-    public function __construct() 
-    {
-
-    }
-
-    private $resume;
-    private $applEssay;
-    private $recomLetter;
-    private $OtherDocs;
-
-    public function addDoc($docname, $content)
-    {
-        // TODO implement here
-    }
-
-    public function rmvDoc($docname)
-    {
-        // TODO implement here
-    }
-
-    public function viewDoc($docname) 
-    {
-        // TODO implement here
-    }
-
-}
+</body>
+</html>
