@@ -1,0 +1,19 @@
+<?php
+
+require_once("../classes/MainClass.php");
+
+$admin= new Administrator();
+
+$mailid=$_POST['mailid'];echo $mailid,"<br>";
+$res= $admin->removeAppl($mailid);
+
+if ($res == true ) 
+{echo "ASSASASAS";exit();
+    header("Location: admin.php");
+}
+else 
+{echo "FAIL";exit();
+   header("Location: admin.php");
+}
+
+?>>

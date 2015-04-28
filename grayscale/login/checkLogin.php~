@@ -1,7 +1,7 @@
 <?php
 
-require_once("classes/MainClass.php");
-require_once("classes/LoginClass.php");
+require_once("../classes/MainClass.php");
+require_once("../classes/LoginClass.php");
 $login = new login();
 
 //Check if user is logged in
@@ -10,11 +10,11 @@ if ($login->isUserLoggedIn() != NULL )
   	$user_type=$_SESSION['user_type'];
     if($user_type=="Administrator")
     {   
-    	header("Location: admin/admin.php");
+    	header("Location: ../admin/admin.php");
     }
     else if($user_type=="Counselor")
-    {
-    	header("Location: counselor/counselor.php");
+    {echo "SaSAS";
+    	//header("Location: ../counselor/counselor.php");
     }
     else if($user_type=="Applicant")
     {
@@ -23,9 +23,9 @@ if ($login->isUserLoggedIn() != NULL )
        	$firstVisit = $appl->isfirst($user_name);
     	if($firstVisit==true)
         {
-    		header("Location: applicant/First_time.php");
+    		header("Location: ../applicant/firstTime.php");
     	} 	
-    	else header("Location: applicant/applicant.php");
+    	else header("Location: ../applicant/applicant.php");
     }
 } 
 else

@@ -13,7 +13,7 @@ class DBClass
     {
 		if(!isset(self::$connection)) 
 		{
-			$config = parse_ini_file('../login/config.ini'); 
+			$config = parse_ini_file('./config.ini');
 			self::$connection = new mysqli($config['host'],$config['username'],$config['password'],$config['dbname']);
 		}
 		if(self::$connection === false) 
