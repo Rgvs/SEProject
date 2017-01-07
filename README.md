@@ -1,1 +1,1 @@
-# SEProject
+# SEProject Edutick
